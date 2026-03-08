@@ -23,10 +23,24 @@ jobs:
       run: npm install
     # Additional steps for building, testing, and deploying to your cloud provider
     # ... (e.g., using a specific action for Azure/Heroku/AWS)
-    - name: Deploy to Github Pages
-      uses: peaceiris/actions-gh-pages@v4
+    - name: Deploy to Server via SSH
+      uses: appleboy/scp-action@v0.1.4 # Use a marketplace action to copy files
       with:
-        #deploy_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        #publish_dir: ./dist
-        publish_dir: ./dist
+        host: ${{ secrets.DEPLOY_HOST }}
+        username: ${{ secrets.DEPLOY_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "."
+        target: "/var/www/your-api-path" # Target directory on your server
+
+    - name: Restart application on server
+      uses: appleboy/ssh-action@v1.0.3 # Use a marketplace action to run SSH commands
+      with:
+        host: ${{ secrets.DEPLOY_HOST }}
+        username: ${{ secrets.DEPLOY_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /var/www/your-api-path
+          # Install new dependencies if any (optional)
+          npm install 
+          # Restart the app using PM2 or similar process manager
+          pm2 restart app.js || pm2 start app.js
