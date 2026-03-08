@@ -1,4 +1,4 @@
-name: Deploy React App to Github Pages
+name: Deploy NodeJSAPI App to Github Pages
 
 on:
   push:
