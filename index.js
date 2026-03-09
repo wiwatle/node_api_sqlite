@@ -3,11 +3,22 @@ const sqlite3 = require('sqlite3').verbose();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+const path = require('path');
+const isAzure = process.env.WEBSITES_ENABLE_APP_SERVICE_STORAGE === 'true';
+// On Azure, use the persistent /home directory
+// Locally, use a local 'data' folder
+const dbPath = isAzure 
+  ? '/home/site/wwwroot/data/database.sqlite' 
+  : path.join(__dirname, 'data', 'database.sqlite');
+
+//const db = new sqlite3.Database(dbPath);
+
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
 // Connect to SQLite database
-const db = new sqlite3.Database('./database.db', (err) => {
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) console.error(err.message);
     console.log('Connected to the SQLite database.');
 });
