@@ -22,7 +22,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
     if (err) console.error(err.message);
     console.log('Connected to the SQLite database.');
 });
-
+db.run('PRAGMA journal_mode = WAL;');
 // Create a sample table
 db.run(`CREATE TABLE IF NOT EXISTS students (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
