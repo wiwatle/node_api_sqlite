@@ -9,9 +9,9 @@ const path = require('path');
 const isAzure = process.env.WEBSITES_ENABLE_APP_SERVICE_STORAGE === 'true';
 // On Azure, use the persistent /home directory
 // Locally, use a local 'data' folder
-const dbPath = isAzure 
-  ? '/home/site/wwwroot/data/database.sqlite' 
-  : path.join(__dirname, 'data', 'database.sqlite');
+//const dbPath = isAzure 
+//  ? '/home/site/wwwroot/data/database.sqlite' 
+//  : path.join(__dirname, 'data', 'database.sqlite');
 
 //const db = new sqlite3.Database(dbPath);
 
@@ -20,11 +20,11 @@ const dbPath = isAzure
 app.use(express.json());
 
 // Connect to SQLite database
-const db = new sqlite3.Database(dbPath, (err) => {
+const db = new sqlite3.Database('./database.sqlite', (err) => {
     if (err) console.error(err.message);
     console.log('Connected to the SQLite database.');
 });
-db.run('PRAGMA journal_mode = WAL;');
+//db.run('PRAGMA journal_mode = WAL;');
 // Create a sample table
 db.run(`CREATE TABLE IF NOT EXISTS students (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
