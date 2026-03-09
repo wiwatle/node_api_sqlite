@@ -10,8 +10,8 @@ const isAzure = process.env.WEBSITES_ENABLE_APP_SERVICE_STORAGE === 'true';
 // On Azure, use the persistent /home directory
 // Locally, use a local 'data' folder
 const dbPath = isAzure 
-  ? '/home/site/wwwroot/data/database.db' 
-  : path.join(__dirname, 'data', 'database.db');
+  ? '/home/site/wwwroot/data/database.sqlite' 
+  : path.join(__dirname, 'data', 'database.sqlite');
 
 //const db = new sqlite3.Database(dbPath);
 
