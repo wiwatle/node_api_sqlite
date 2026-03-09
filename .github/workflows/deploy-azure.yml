@@ -1,5 +1,10 @@
 name: Deploy Node.js to Azure
 
+env:
+  AZURE_WEBAPP_NAME: 'node-api-sqlite'    # set this to the name of your Azure Web App
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+
+
 on:
   push:
     branches:
@@ -32,8 +37,7 @@ jobs:
           npm run build --if-present
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v3 # Check for v4 if available in 2026
         with:
-          app-name: 'node-api-sqlite' # Replace with your Azure App name
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
