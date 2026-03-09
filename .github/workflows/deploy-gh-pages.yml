@@ -23,24 +23,4 @@ jobs:
       run: npm install
     # Additional steps for building, testing, and deploying to your cloud provider
     # ... (e.g., using a specific action for Azure/Heroku/AWS)
-    - name: Deploy to Server via SSH
-      uses: appleboy/scp-action@v0.1.4 # Use a marketplace action to copy files
-      with:
-        host: ${{ secrets.DEPLOY_HOST }}
-        username: ${{ secrets.DEPLOY_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "."
-        target: "/var/www/your-api-path" # Target directory on your server
-
-    - name: Restart application on server
-      uses: appleboy/ssh-action@v1.0.3 # Use a marketplace action to run SSH commands0
-      with:
-        host: ${{ secrets.DEPLOY_HOST }}
-        username: ${{ secrets.DEPLOY_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /var/www/your-api-path
-          # Install new dependencies if any (optional)
-          npm install 
-          # Restart the app using PM2 or similar process manager
-          pm2 restart app.js || pm2 start app.js
+ 
