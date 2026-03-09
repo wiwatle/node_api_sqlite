@@ -2,14 +2,16 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
 const PORT = process.env.PORT || 8080;
-
+app.listen(PORT, () => {
+    console.log(`API is live on port ${PORT}`);
+});
 const path = require('path');
 const isAzure = process.env.WEBSITES_ENABLE_APP_SERVICE_STORAGE === 'true';
 // On Azure, use the persistent /home directory
 // Locally, use a local 'data' folder
 const dbPath = isAzure 
-  ? '/home/site/wwwroot/data/database.sqlite' 
-  : path.join(__dirname, 'data', 'database.sqlite');
+  ? '/home/site/wwwroot/data/database.db' 
+  : path.join(__dirname, 'data', 'database.db');
 
 //const db = new sqlite3.Database(dbPath);
 
@@ -75,7 +77,3 @@ app.patch('/students/', (req, res) => {
     });
 });
 
-
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-});
