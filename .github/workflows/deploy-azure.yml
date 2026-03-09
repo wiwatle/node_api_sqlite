@@ -14,8 +14,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
+      contents: write
+      pages: write
       id-token: write
-      contents: read
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
