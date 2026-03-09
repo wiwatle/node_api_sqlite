@@ -33,7 +33,7 @@ jobs:
         target: "/var/www/your-api-path" # Target directory on your server
 
     - name: Restart application on server
-      uses: appleboy/ssh-action@v1.0.3 # Use a marketplace action to run SSH commands
+      uses: appleboy/ssh-action@v1.0.3 # Use a marketplace action to run SSH commands0
       with:
         host: ${{ secrets.DEPLOY_HOST }}
         username: ${{ secrets.DEPLOY_USER }}
