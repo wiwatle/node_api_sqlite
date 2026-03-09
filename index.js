@@ -5,8 +5,8 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`API is live on port ${PORT}`);
 });
-const path = require('path');
-const isAzure = process.env.WEBSITES_ENABLE_APP_SERVICE_STORAGE === 'true';
+//const path = require('path');
+//const isAzure = process.env.WEBSITES_ENABLE_APP_SERVICE_STORAGE === 'true';
 // On Azure, use the persistent /home directory
 // Locally, use a local 'data' folder
 //const dbPath = isAzure 
