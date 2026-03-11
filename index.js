@@ -36,7 +36,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS students (
     description TEXT
 )`);
 
-// --- API Routes ---
+// --- API Routes ---///////
 
 // GET: Fetch all items
 app.get('/students', (req, res) => {
