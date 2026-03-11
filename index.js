@@ -40,7 +40,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS students (
 
 // GET: Fetch all items
 app.get('/students', (req, res) => {
-    db.all("SELECT * FROM students", [], (err, rows) => {
+    db.prepare("SELECT * FROM students", [], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows);
     });
