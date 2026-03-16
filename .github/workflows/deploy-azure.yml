@@ -37,6 +37,7 @@ jobs:
           npm install better-sqlite3
           npm install electron-rebuild --save-dev
           npm install
+          npm rebuild
           npm run build --if-present
 
       - name: 'Deploy to Azure Web App'
