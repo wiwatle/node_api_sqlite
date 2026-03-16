@@ -1,4 +1,5 @@
 const express = require('express');
+
 //const sqlite3 = require('sqlite3').verbose();
 //const { DatabaseSync } = require('node:sqlite');
 const Database = require('better-sqlite3');
@@ -9,6 +10,7 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`API is live on port ${PORT}`);
 });
+
 //const path = require('path');
 //const isAzure = process.env.WEBSITES_ENABLE_APP_SERVICE_STORAGE === 'true';
 // On Azure, use the persistent /home directory
