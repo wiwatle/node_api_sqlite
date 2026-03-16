@@ -31,55 +31,57 @@ app.use(express.json());
     //console.log('Connected to the SQLite database.');
 //});
 //db.run('PRAGMA journal_mode = WAL;');
-// Create a sample table
-db.exec(`CREATE TABLE IF NOT EXISTS students (
+
+// Create a table for 'items'
+const createTable = `
+CREATE TABLE IF NOT EXISTS students (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     firstname TEXT NOT NULL,
     lastname TEXT NOT NULL,
     age integer NOT NULL,
     description TEXT
-)`);
+);`;
 
+db.exec(createTable);
+
+module.exports = db;
 // --- API Routes ---///////
 
 // GET: Fetch all items
 app.get('/students', (req, res) => {
-    db.prepare("SELECT * FROM students", [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
-    });
+    const stmt = db.prepare('SELECT * FROM students');
+    const items = stmt.all();
+    res.json(items);
 });
 
 // POST: Create a new item
 app.post('/students', (req, res) => {
     const { firstname,lastname,age, description } = req.body;
-    db.exec("INSERT INTO students (firstname,lastname,age, description) VALUES (?,?,?, ?)", [firstname,lastname,age, description], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.status(201).json({ id: this.lastID, firstname,lastname,age, description });
-    });
+    const stmt = db.prepare('INSERT INTO students (firstname, lastname,age,description) VALUES (?, ?,?,?)');
+    const info = stmt.run(firstname,lastname,age, description);
+    
+    res.status(201).json({ id: info.lastInsertRowid, firstname,lastname,age, description });
 });
+
 
 // DELETE: Remove an item
 app.delete('/students/:id', (req, res) => {
-    db.exec("DELETE FROM students WHERE id = ?", req.params.id, function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ deleted: this.changes });
-    });
+    const stmt = db.prepare('DELETE FROM students WHERE id = ?');
+    const info = stmt.run(req.params.id);
+    
+    if (info.changes === 0) return res.status(404).json({ error: 'Item not found' });
+    res.status(204).send();
 });
 
 
-// PATCH: update an item
-app.patch('/students/', (req, res) => {
-    const { id,firstname,lastname,age, description } = req.body;
-    db.exec("UPDATE students set firstname=?,lastname=?,age=?,description=? WHERE id = ?", [
-        firstname
-        ,lastname
-        ,age
-        ,description
-        ,id
-    ], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ updated: this.changes });
-    });
+// put: update an item
+app.put('/students/:id', (req, res) => {
+    const { firstname,lastname,age, description } = req.body;
+    const stmt = db.prepare('UPDATE students SET firstname = ?,lastname = ?,age = ?, description = ? WHERE id = ?');
+    const info = stmt.run(firstname,lastname,age, description, req.params.id);
+    
+    if (info.changes === 0) return res.status(404).json({ error: 'Item not found' });
+    res.json({ message: 'Item updated successfully' });
 });
+
 
