@@ -34,7 +34,6 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          npm install
           npm install better-sqlite3
           npm run build --if-present
 

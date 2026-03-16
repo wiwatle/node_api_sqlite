@@ -1,7 +1,9 @@
 const express = require('express');
 //const sqlite3 = require('sqlite3').verbose();
-const { DatabaseSync } = require('node:sqlite');
-const db = new DatabaseSync('database.db');
+//const { DatabaseSync } = require('node:sqlite');
+const Database = require('better-sqlite3');
+//const db = new DatabaseSync('database.db');
+const db = new Database('database.db');
 const app = express();
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
@@ -49,7 +51,7 @@ app.get('/students', (req, res) => {
 // POST: Create a new item
 app.post('/students', (req, res) => {
     const { firstname,lastname,age, description } = req.body;
-    db.prepare("INSERT INTO students (firstname,lastname,age, description) VALUES (?,?,?, ?)", [firstname,lastname,age, description], function(err) {
+    db.exec("INSERT INTO students (firstname,lastname,age, description) VALUES (?,?,?, ?)", [firstname,lastname,age, description], function(err) {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json({ id: this.lastID, firstname,lastname,age, description });
     });
@@ -57,7 +59,7 @@ app.post('/students', (req, res) => {
 
 // DELETE: Remove an item
 app.delete('/students/:id', (req, res) => {
-    db.prepare("DELETE FROM students WHERE id = ?", req.params.id, function(err) {
+    db.exec("DELETE FROM students WHERE id = ?", req.params.id, function(err) {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ deleted: this.changes });
     });
@@ -67,7 +69,7 @@ app.delete('/students/:id', (req, res) => {
 // PATCH: update an item
 app.patch('/students/', (req, res) => {
     const { id,firstname,lastname,age, description } = req.body;
-    db.prepare("UPDATE students set firstname=?,lastname=?,age=?,description=? WHERE id = ?", [
+    db.exec("UPDATE students set firstname=?,lastname=?,age=?,description=? WHERE id = ?", [
         firstname
         ,lastname
         ,age
